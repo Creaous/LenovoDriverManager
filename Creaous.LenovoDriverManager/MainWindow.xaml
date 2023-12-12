@@ -1,0 +1,156 @@
+﻿<ui:UiWindow x:Class="Creaous.LenovoDriverManager.LenovoUpdateCatalog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:local="clr-namespace:Creaous.LenovoDriverManager"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="750"
+             Title="Lenovo Update Catalog" ResizeMode="NoResize">
+
+    <DockPanel>
+        <!-- Status Bar -->
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem>
+                <TextBlock x:Name="Status">Ready</TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+
+        <!-- Main Content -->
+        <DockPanel DockPanel.Dock="Top">
+            <StackPanel DockPanel.Dock="Top">
+                <Grid Margin="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="249*" />
+                        <ColumnDefinition Width="341*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <ui:TextBox x:Name="TbProduct" PlaceholderText="Enter the Lenovo product ID or serial number"
+                                VerticalAlignment="Center" Grid.ColumnSpan="2" />
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <ui:Button x:Name="BtnWhatIsThis" Width="36" Height="36" FontSize="12" Icon="QuestionCircle48"
+                                   Margin="4,0" Click="BtnWhatIsThis_Click" />
+                        <ui:Button x:Name="BtnCheck" Content="Check" Width="90" Height="36" Margin="0" FontSize="12"
+                                   Icon="Checkmark48" Click="BtnCheck_Click" />
+                        <ui:Button x:Name="BtnClearDownloads" Width="36" Height="36" FontSize="12" Icon="Delete48"
+                                   Margin="4,0" Click="BtnClearDownloads_Click" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+
+            <!-- Data View -->
+            <ListView x:Name="DataView" DockPanel.Dock="Right"
+                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=ui:UiWindow}, Path=DownloadData}"
+                      ScrollViewer.CanContentScroll="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Orientation="Horizontal">
+                                <Label Content="{Binding Path=Name}" Margin="4,0" />
+                                <ProgressBar Height="20" Width="100" Value="{Binding Path=Progress}" Margin="4,0" />
+                                <ui:Button Click="Open_Click" Tag="{Binding}" Content="Open" Margin="4,0"
+                                           IsEnabled="{Binding Path=Enabled}" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!-- Tree View -->
+            <TreeView DockPanel.Dock="Top" x:Name="treeView"
+                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=ui:UiWindow}, Path=Categories}"
+                      ScrollViewer.CanContentScroll="True" Height="400">
+                <TreeView.Resources>
+                    <!-- Hierarchical Data Template for Categories -->
+                    <HierarchicalDataTemplate DataType="{x:Type local:Category}" ItemsSource="{Binding Updates}">
+                        <CheckBox Content="{Binding Name}"
+                                  IsChecked="{Binding Path=(local:ItemHelper.IsChecked), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <!-- CheckBox Style -->
+                            <CheckBox.Style>
+                                <Style TargetType="{x:Type CheckBox}">
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=(local:ItemHelper.IsChecked)}"
+                                                     Value="False">
+                                            <Setter Property="Foreground" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </CheckBox.Style>
+                        </CheckBox>
+                    </HierarchicalDataTemplate>
+
+                    <!-- Data Template for Updates -->
+                    <DataTemplate DataType="{x:Type local:Update}">
+                        <CheckBox Content="{Binding Name}"
+                                  IsChecked="{Binding Path=(local:ItemHelper.IsChecked), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <!-- CheckBox Style (Same as above) -->
+                            <CheckBox.Style>
+                                <Style TargetType="{x:Type CheckBox}">
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=(local:ItemHelper.IsChecked)}"
+                                                     Value="False">
+                                            <Setter Property="Foreground" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </CheckBox.Style>
+                        </CheckBox>
+                    </DataTemplate>
+                </TreeView.Resources>
+
+                <!-- TreeViewItem Style -->
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsExpanded" Value="True" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>
+
+            <!-- Buttons -->
+            <Grid>
+                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Orientation="Horizontal"
+                            Margin="50,0">
+                    <ui:Button x:Name="BtnSelectSuggested" Content="Select Suggested" Width="140" Height="32"
+                               Margin="4,0" Click="BtnSelectSuggested_Click" FontSize="12" Icon="MultiselectLtr24" />
+                    <ui:Button x:Name="BtnSelectAll" HorizontalAlignment="Center" Content="Select All" Width="140"
+                               Height="32" Margin="4,0" Click="BtnSelectAll_Click" FontSize="12" Icon="SelectAllOn24" />
+                    <ui:Button x:Name="BtnDeselectAll" HorizontalAlignment="Center" Content="Deselect All" Width="140"
+                               Height="32" Margin="4,0" Click="BtnDeselectAll_Click" FontSize="12"
+                               Icon="SelectAllOff24" />
+                </StackPanel>
+
+                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Right" Orientation="Horizontal"
+                            Margin="50,0">
+                    <ui:Button x:Name="BtnInstallSelected" HorizontalAlignment="Right" Content="Download" Width="140"
+                               Height="32" Margin="4,0" Click="BtnInstallSelected_Click" FontSize="12"
+                               Icon="ArrowDownload48" />
+                    <ui:Button x:Name="BtnSettings" Width="34" Height="32" FontSize="12" Icon="Settings32"
+                               Click="BtnSettings_Click" />
+                </StackPanel>
+            </Grid>
+        </DockPanel>
+    </DockPanel>
+</ui:UiWindow>

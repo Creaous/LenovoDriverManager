@@ -58,7 +58,7 @@ Lenovo Driver Manager is a program intended to help support people in downloadin
 
 |                               Start                          |                               Driver List                                |                               Downloads                              |                               Settings                             |
 | :----------------------------------------------------------: | :----------------------------------------------------------------------: | :------------------------------------------------------------------: | :----------------------------------------------------------------: |
-| <img src="docs/images/start.png" title="Start" width="100%"> | <img src="docs/images/driver-list.png" title="Driver List" width="100%"> | <img src="docs/images/downloads.png" title="Downloads" width="100%"> | <img src="docs/images/settings.png" title="Settings" width="100%"> |
+| <img src="docs/images/Start.png" title="Start" width="100%"> | <img src="docs/images/Driver-List.png" title="Driver List" width="100%"> | <img src="docs/images/Downloads.png" title="Downloads" width="100%"> | <img src="docs/images/Settings.png" title="Settings" width="100%"> |
 
 </details>
 

@@ -1,6 +1,6 @@
 <h1 align="center">
   <a href="https://github.com/Creaous/LenovoDriverManager">
-    <img src="/docs/logo.png" alt="Logo" width="100" height="100">
+    <img src="/docs/Logo.png" alt="Logo" width="100" height="100">
   </a>
 </h1>
 

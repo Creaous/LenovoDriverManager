@@ -4,36 +4,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:properties="clr-namespace:Creaous.LenovoDriverManager.Properties"
     x:Class="Creaous.LenovoDriverManager.SettingsWindow"
     mc:Ignorable="d"
     Title="Settings" Height="450" Width="300"
-    DataContext="{x:Static properties:Settings.Default}" ResizeMode="NoResize">
+    ResizeMode="NoResize">
 
-    <ScrollViewer HorizontalScrollBarVisibility="Visible">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
         <StackPanel Margin="4">
-            <GroupBox x:Name="GbUpdates" Header="Updates" FontSize="14" FontWeight="Bold">
-                <StackPanel Margin="8">
-                    <Label Content="Update Product" Foreground="Black" FontWeight="Normal" />
-                    <ui:TextBox x:Name="UpdProduct" TextWrapping="Wrap" Text="{Binding Default.updateProduct}"
-                                IsEnabled="False" FontWeight="Normal" />
-                    <Label Content="Update Branch" Margin="0,8,0,0" Foreground="Black" FontWeight="Normal" />
-                    <ui:TextBox x:Name="UpdBranch" TextWrapping="Wrap" Text="{Binding Default.updateBranch}"
-                                FontWeight="Normal" />
-                    <Label Content="Update Key" Margin="0,8,0,0" Foreground="Black" FontWeight="Normal" />
-                    <ui:TextBox x:Name="UpdKey" TextWrapping="Wrap" Text="{Binding Default.updateKey}"
-                                FontWeight="Normal" />
-                    <ui:Button x:Name="BtnSave" Content="Save" Margin="0,8,0,0" FontSize="14" Icon="Save28"
-                               HorizontalAlignment="Stretch" Click="BtnSave_Click" />
-                </StackPanel>
-            </GroupBox>
-            <GroupBox x:Name="GbDangerZone" Header="DANGER ZONE" FontSize="14" FontWeight="Bold" Foreground="#FFB30000"
-                      Visibility="Collapsed">
-                <StackPanel Margin="8">
-                    <ui:Button x:Name="BtnReset" Content="Reset All Settings" Margin="0,8,0,0" FontSize="14"
-                               Icon="ArrowReset48" HorizontalAlignment="Stretch" Click="BtnReset_Click" />
-                </StackPanel>
-            </GroupBox>
             <GroupBox x:Name="GbAbout" Header="About" FontSize="14" FontWeight="Bold">
                 <StackPanel Margin="8">
                     <Label x:Name="LbName" Content="PLACEHOLDER" Foreground="Black" FontWeight="Normal" />

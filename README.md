@@ -76,7 +76,7 @@ Lenovo Driver Manager is a program intended to help support people in downloadin
 
 ### Installation
 
-1. Go to the [releases] page.
+1. Go to the [releases](https://github.com/Creaous/LenovoDriverManager/releases/latest) page.
 2. Download the latest exe build.
 3. Run the downloaded exe.
 

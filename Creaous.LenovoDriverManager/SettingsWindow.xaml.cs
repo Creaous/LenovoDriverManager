@@ -16,7 +16,7 @@ public partial class SettingsWindow : Window
         InitializeComponent();
         LbName.Content = Assembly.GetExecutingAssembly().GetName().Name;
         LbVersion.Content = string.Format("v{0}", Assembly.GetExecutingAssembly().GetName().Version);
-        LbAuthor.Content = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).CompanyName;
+        LbAuthor.Content = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location).CompanyName;
     }
 
     private void BtnReset_Click(object sender, RoutedEventArgs e)

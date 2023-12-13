@@ -43,25 +43,33 @@ public partial class LenovoUpdateCatalog : UiWindow
     {
         try
         {
-            var client = new HttpClient();
-            var response = await client.GetAsync("http://localhost:50131/Detect");
-
-            var data = JObject.Parse(await response.Content.ReadAsStringAsync());
-            TbProduct.Text = (string)data["DetectData"]["Sn"];
-
-            if ((string)data["DetectData"]["Sn"] != null)
+            using (var client = new HttpClient())
             {
-                CheckCatalog();
-                MessageBox.Show(
-                    "We detected Lenovo Service Bridge on this device and have automatically retrieved the serial number and download catalog for you.",
-                    "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                var response = await client.GetAsync("http://localhost:50131/Detect");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    var data = JObject.Parse(responseData);
+
+                    if (data["DetectData"]?["Sn"] != null)
+                    {
+                        TbProduct.Text = (string)data?["DetectData"]?["Sn"]!;
+                        CheckCatalog();
+
+                        MessageBox.Show(
+                            "We detected Lenovo Service Bridge on this device and have automatically retrieved the serial number and download catalog for you.",
+                            "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
             }
         }
         catch (Exception ex)
         {
-            // Silently drop exception
+            Debug.WriteLine(ex.Message);
         }
     }
+
 
     private async Task SendRequest(string url)
     {
@@ -94,34 +102,34 @@ public partial class LenovoUpdateCatalog : UiWindow
 
     private void ProcessJsonResponse(JObject json)
     {
-        var allCategories = (JArray)json["body"]["AllCategories"];
+        var allCategories = (JArray)json?["body"]?["AllCategories"]!;
         var categoriesArray = allCategories.ToObject<string[]>();
 
-        foreach (var category in categoriesArray)
+        foreach (var category in categoriesArray!)
             Categories.Add(new Category { Name = category, Updates = new List<Update>() });
 
-        var downloadItems = (JArray)json["body"]["DownloadItems"];
+        var downloadItems = (JArray)json?["body"]?["DownloadItems"]!;
 
-        foreach (var item in downloadItems) ProcessDownloadItem(item);
+        foreach (var item in downloadItems!) ProcessDownloadItem(item);
 
-        Categories.RemoveAt(Categories.IndexOf(Categories.Where(z => z.Name == "Tool").FirstOrDefault()));
+        Categories.RemoveAt(Categories.IndexOf(Categories.FirstOrDefault(z => z.Name == "Tool")!));
     }
 
     private void ProcessDownloadItem(JToken item)
     {
-        var files = (JArray)item["Files"];
+        var files = (JArray)item?["Files"]!;
         var category =
-            Categories.IndexOf(Categories.Where(z => z.Name == item["Category"]["Name"].ToString()).FirstOrDefault());
+            Categories.IndexOf(Categories.FirstOrDefault(z => z.Name == item?["Category"]?["Name"]?.ToString())!);
 
         foreach (var file in files)
-            if (file["TypeString"].ToString() != "TXT README" && file["TypeString"].ToString() != "PDF")
+            if (file?["TypeString"]?.ToString() != "TXT README" && file?["TypeString"]?.ToString() != "PDF")
                 Categories[category].Updates.Add(new Update
                 {
-                    Name = file["Name"] + " (" + file["Version"] + ")",
-                    MD5 = file["MD5"].ToString(),
-                    Size = file["Size"].ToString(),
-                    URL = file["URL"].ToString(),
-                    Version = file["Version"].ToString()
+                    Name = file?["Name"] + " (" + file?["Version"] + ")",
+                    MD5 = file?["MD5"]?.ToString()!,
+                    Size = file?["Size"]?.ToString()!,
+                    URL = file?["URL"]?.ToString()!,
+                    Version = file?["Version"]?.ToString()!
                 });
     }
 
@@ -151,7 +159,7 @@ public partial class LenovoUpdateCatalog : UiWindow
         foreach (var suggestion in suggested)
         {
             var update =
-                category.Updates.IndexOf(category.Updates.Where(z => z.Name.Contains(suggestion)).FirstOrDefault());
+                category.Updates.IndexOf(category.Updates.FirstOrDefault(z => z.Name.Contains(suggestion))!);
 
             if (update != -1) ItemHelper.SetIsChecked(category.Updates[update], true);
         }
@@ -221,7 +229,7 @@ public partial class LenovoUpdateCatalog : UiWindow
             if (currentMd5.Equals(md5, StringComparison.OrdinalIgnoreCase))
             {
                 Debug.WriteLine("Download completed. MD5 hashes match. The file is unchanged.");
-                var dlId = DownloadData.IndexOf(DownloadData.Where(z => z.Name.Contains(name)).FirstOrDefault());
+                var dlId = DownloadData.IndexOf(DownloadData.FirstOrDefault(z => z.Name.Contains(name))!);
 
                 Dispatcher.Invoke(() =>
                 {
@@ -258,7 +266,7 @@ public partial class LenovoUpdateCatalog : UiWindow
 
     private void HandleDownloadProgressChanged(DownloadProgressChangedEventArgs e, string name)
     {
-        var dlId = DownloadData.IndexOf(DownloadData.Where(z => z.Name.Contains(name)).FirstOrDefault());
+        var dlId = DownloadData.IndexOf(DownloadData.FirstOrDefault(z => z.Name.Contains(name))!);
         Dispatcher.Invoke(() =>
         {
             DownloadData[dlId].Progress = e.ProgressPercentage;
@@ -281,9 +289,9 @@ public partial class LenovoUpdateCatalog : UiWindow
     private void Open_Click(object sender, EventArgs e)
     {
         var button = sender as Button;
-        var tag = button.Tag as Download;
-        var filename = tag.File;
-        Process.Start(filename);
+        var tag = button?.Tag as Download;
+        var filename = tag?.File;
+        Process.Start(filename!);
     }
 
     private void BtnSettings_Click(object sender, RoutedEventArgs e)

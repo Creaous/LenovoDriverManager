@@ -1,7 +1,3 @@
-# No Update Branch
-You'll not receive any auto updates on this branch. We have completely removed the AutoUpdater.NET NuGet package as well as the settings for updates.
-Want updates? Click [here](https://github.com/Creaous/LenovoDriverManager/tree/main).
-
 <h1 align="center">
   <a href="https://github.com/Creaous/LenovoDriverManager">
     <img src="/docs/images/Logo.png" alt="Logo" width="100" height="100">

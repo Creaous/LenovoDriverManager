@@ -6,10 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Threading;
-using System.Xml;
-using System.Xml.Serialization;
 using Newtonsoft.Json.Linq;
 using Wpf.Ui.Controls;
 using Button = Wpf.Ui.Controls.Button;
@@ -292,7 +288,7 @@ public partial class LenovoUpdateCatalog : UiWindow
 
     private void BtnSettings_Click(object sender, RoutedEventArgs e)
     {
-        var settings = new SettingsWindow(Control.ModifierKeys == Keys.Control);
+        var settings = new SettingsWindow();
         settings.ShowDialog();
     }
 

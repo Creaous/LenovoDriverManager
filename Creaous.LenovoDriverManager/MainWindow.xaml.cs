@@ -10,8 +10,6 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Serialization;
-using AutoUpdaterDotNET;
-using Creaous.LenovoDriverManager.Properties;
 using Newtonsoft.Json.Linq;
 using Wpf.Ui.Controls;
 using Button = Wpf.Ui.Controls.Button;
@@ -28,19 +26,6 @@ public partial class LenovoUpdateCatalog : UiWindow
     {
         InitializeComponent();
 
-        var updaterUrl = "https://update.creaous.net/check/?p=" + Settings.Default.updateProduct + "&b=" +
-                         Settings.Default.updateBranch + "&k=" +
-                         Settings.Default.updateKey;
-
-        AutoUpdater.RunUpdateAsAdmin = false;
-        AutoUpdater.ParseUpdateInfoEvent += AutoUpdaterOnParseUpdateInfoEvent;
-
-        AutoUpdater.Start(updaterUrl);
-
-        var timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(2) };
-        timer.Tick += delegate { AutoUpdater.Start(updaterUrl); };
-        timer.Start();
-
         Categories = new ObservableCollection<Category>();
         DownloadData = new ObservableCollection<Download>();
 
@@ -50,20 +35,6 @@ public partial class LenovoUpdateCatalog : UiWindow
     // Use auto-implemented properties
     public ObservableCollection<Category> Categories { get; set; }
     public ObservableCollection<Download> DownloadData { get; set; }
-
-    private void AutoUpdaterOnParseUpdateInfoEvent(ParseUpdateInfoEventArgs args)
-    {
-        try
-        {
-            var xmlSerializer = new XmlSerializer(typeof(UpdateInfoEventArgs));
-            var xmlTextReader = new XmlTextReader(new StringReader(args.RemoteData)) { XmlResolver = null };
-            args.UpdateInfo = (UpdateInfoEventArgs)xmlSerializer.Deserialize(xmlTextReader);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(args.RemoteData, "Updater Fatal Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-    }
 
     private void UpdateList()
     {

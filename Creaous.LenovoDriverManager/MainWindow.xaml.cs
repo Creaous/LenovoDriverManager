@@ -196,26 +196,24 @@ public partial class LenovoUpdateCatalog : UiWindow
 
             Directory.CreateDirectory(dir);
 
-            using (var web = new WebClient())
+            using var web = new WebClient();
+            var file = $"{dir}/{url.Split('?').First().Split('/').Last().Split('\\').Last()}";
+
+            Dispatcher.Invoke(() =>
             {
-                var file = $"{dir}/{url.Split('?').First().Split('/').Last().Split('\\').Last()}";
+                DownloadData.Add(new Download { Name = name, Progress = 0, File = file, Enabled = false });
+            });
 
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadData.Add(new Download { Name = name, Progress = 0, File = file, Enabled = false });
-                });
+            web.DownloadFileCompleted += (sender, e) => HandleDownloadCompleted(e, md5, name, file);
+            web.DownloadProgressChanged += (sender, e) => HandleDownloadProgressChanged(e, name);
 
-                web.DownloadFileCompleted += (sender, e) => HandleDownloadCompleted(e, md5, name, file);
-                web.DownloadProgressChanged += (sender, e) => HandleDownloadProgressChanged(e, name);
-
-                try
-                {
-                    web.DownloadFileAsync(new Uri(url), file);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("Exception during download: " + ex.Message);
-                }
+            try
+            {
+                web.DownloadFileAsync(new Uri(url), file);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception during download: " + ex.Message);
             }
         });
     }

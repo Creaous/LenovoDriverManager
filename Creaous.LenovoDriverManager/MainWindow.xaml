@@ -6,7 +6,8 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:local="clr-namespace:Creaous.LenovoDriverManager"
              mc:Ignorable="d"
-             d:DesignHeight="600" d:DesignWidth="750"
+             d:DesignHeight="600"
+             Width="780"
              Title="Lenovo Update Catalog" ResizeMode="NoResize">
 
     <DockPanel>
@@ -130,27 +131,23 @@
             </TreeView>
 
             <!-- Buttons -->
-            <Grid>
-                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Orientation="Horizontal"
-                            Margin="50,0">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal"
+                            Margin="50, 0, 50, 0">
                     <ui:Button x:Name="BtnSelectSuggested" Content="Select Suggested" Width="140" Height="32"
-                               Margin="4,0" Click="BtnSelectSuggested_Click" FontSize="12" Icon="MultiselectLtr24" />
+                                   Margin="4,0" Click="BtnSelectSuggested_Click" FontSize="12" Icon="MultiselectLtr24" />
                     <ui:Button x:Name="BtnSelectAll" HorizontalAlignment="Center" Content="Select All" Width="140"
-                               Height="32" Margin="4,0" Click="BtnSelectAll_Click" FontSize="12" Icon="SelectAllOn24" />
+                                   Height="32" Margin="4,0" Click="BtnSelectAll_Click" FontSize="12" Icon="SelectAllOn24" />
                     <ui:Button x:Name="BtnDeselectAll" HorizontalAlignment="Center" Content="Deselect All" Width="140"
-                               Height="32" Margin="4,0" Click="BtnDeselectAll_Click" FontSize="12"
-                               Icon="SelectAllOff24" />
-                </StackPanel>
-
-                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Right" Orientation="Horizontal"
-                            Margin="50,0">
+                                   Height="32" Margin="4,0" Click="BtnDeselectAll_Click" FontSize="12"
+                                   Icon="SelectAllOff24" />
                     <ui:Button x:Name="BtnInstallSelected" HorizontalAlignment="Right" Content="Download" Width="140"
-                               Height="32" Margin="4,0" Click="BtnInstallSelected_Click" FontSize="12"
-                               Icon="ArrowDownload48" />
+                                       Height="32" Margin="4,0" Click="BtnInstallSelected_Click" FontSize="12"
+                                       Icon="ArrowDownload48" />
                     <ui:Button x:Name="BtnSettings" Width="34" Height="32" FontSize="12" Icon="Settings32"
-                               Click="BtnSettings_Click" />
+                                       Click="BtnSettings_Click" />
                 </StackPanel>
-            </Grid>
+            </ScrollViewer>
         </DockPanel>
     </DockPanel>
 </ui:UiWindow>

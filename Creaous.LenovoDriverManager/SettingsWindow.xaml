@@ -9,7 +9,7 @@
     Title="Settings" Height="450" Width="300"
     ResizeMode="NoResize">
 
-    <ScrollViewer HorizontalScrollBarVisibility="Visible">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
         <StackPanel Margin="4">
             <GroupBox x:Name="GbAbout" Header="About" FontSize="14" FontWeight="Bold">
                 <StackPanel Margin="8">

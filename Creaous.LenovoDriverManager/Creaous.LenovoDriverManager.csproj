@@ -13,6 +13,8 @@
     <Title>$(AssemblyName)</Title>
     <Authors>Creaous</Authors>
     <UseWindowsForms>True</UseWindowsForms>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
